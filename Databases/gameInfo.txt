@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ordered Teams</title>
+</head>
+<body>
+<?php
+include 'connectdb.php';
+?>
+<?php
+
+$gameID = $_POST["gameID"];
+$query1 = 'SELECT game_ID FROM Games WHERE game_ID = \''.$gameID.'\'';
+$result = pg_query($query1);
+if (!$result) {
+   die("error on select ID query");
+}
+if (pg_num_rows($result)>0){
+
+}
+else{
+   echo ("That ID does not exist.");
+}
+?>
+</ol>
+<?php
+   pg_close($connection);
+?>
+</body>
+</html>

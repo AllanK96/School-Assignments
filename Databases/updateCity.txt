@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Assignment 3 NHL</title>
+</head>
+<body>
+<?php
+include 'connectdb.php';
+?>
+<?php
+$updateID = $_POST["gameID"];
+$updateCity = $_POST["cityName"];
+$query1 = 'SELECT game_ID FROM Games WHERE game_ID = \''.$updateID.'\'';
+$result = pg_query($query1);
+if (!$result) {
+   die("error on select ID query");
+}
+if (pg_num_rows($result)>0){
+   $query2 = 'UPDATE games SET Location = \''.$updateCity.'\' WHERE game_ID = \''.$updateID.'\'';
+   $result2 = pg_query($query2);
+   if (!$result2) {
+      die("error on delete ID query");
+   }
+   echo ("Game with ID of: ".$updateID.". Is now played at ".$updateCity);
+ 
+}
+else{
+   echo ("That ID does not exist, therefor city cannot be updated.");
+}
+?>
+</ol>
+</body>
+</html>

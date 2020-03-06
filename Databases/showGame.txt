@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ordered Teams</title>
+</head>
+<body>
+<?php
+include 'connectdb.php';
+?>
+<?php
+
+$gameID = $_POST["gameID"];
+
+$query2 = 'SELECT tmp.game_ID, location, city, game_date, tmp.team_name, score FROM (SELECT games.game_ID, location, team_name, score FROM games, games_played WHERE games.game_ID = games_played.game_ID ORDER BY games.game_ID) as tmp, team WHERE team.team_name=tmp.team_name AND game_ID= \''.$gameID.'\'';
+
+$query1 = 'SELECT first_name, last_anem FROM officals, games_refd WHERE games_refd.game_ID = \''.$gameID.'\' AND games_refd.offical_id = officals.official_id';
+
+$result = pg_query($query2);
+if (!$result) {
+   die("error on select ID query");
+}
+if (pg_num_rows($result)>0){
+     echo "<ol>";
+     $i = pg_num_fields($result);
+     for ($j = 0; $j < $i; $j++){
+        $fieldname = pg_field_name($result,$j);
+	echo ($fieldname." | ");
+     }
+     echo ("<br>");
+     while ($row = pg_fetch_row($result)) {
+        echo("<li>");
+        echo $row[0]." | ".$row[1]." | ".$row[2]." | ".$row[3]." | ".$row[4]." | ".$row[5]."</li>";
+     }
+     $result = pg_query($query1);
+     if (!$result) {
+        die("error on select ID query");
+     }
+     echo ("<br>");
+     while ($row = pg_fetch_row($result)) {
+        echo("<li>");
+        echo $row[0]." | ".$row[1]."</li>";
+     }     
+     echo "</ol>";
+}
+else{
+   echo ("That ID does not exist.");
+}
+?>
+</ol>
+<?php
+   pg_close($connection);
+?>
+</body>
+</html>
